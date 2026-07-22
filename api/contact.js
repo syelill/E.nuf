@@ -11,7 +11,7 @@ const apiKey = process.env.RESEND_KEY_API;
       method: 'POST',
       headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'E.NUF Studio <anything>@phaifnol.resend.app>',
+        from: 'E.NUF Studio <onboarding@resend.dev>',
         to: ['hello@eunicehannah.com'],
         reply_to: email,
         subject: `New note from ${name || 'someone'} — ${kind || 'General'}`,
