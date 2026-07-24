@@ -374,7 +374,7 @@ function CVPage() {
             <span className="cv-head__rule" />
             <span className="cv-head__eyebrow">ABOUT EUNICE</span>
           </div>
-          <h1 className="cv-head__title" style={{ width: "723px", fontSize: "141px", padding: "0px", margin: "0px" }}>
+          <h1 className="cv-head__title">
             Biography<span style={{ color: 'var(--gold)' }}>.</span>
           </h1>
 

@@ -38,17 +38,17 @@ function ContactPage() {
         <form className="contact-form" onSubmit={submit}>
           <div className="field-row">
             <div className="field">
-              <label>Name</label>
-              <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="who's writing?" />
+              <label htmlFor="cf-name">Name</label>
+              <input id="cf-name" name="name" autoComplete="name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="who's writing?" />
             </div>
             <div className="field">
-              <label>Email</label>
-              <input type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="where to write back" />
+              <label htmlFor="cf-email">Email</label>
+              <input id="cf-email" name="email" autoComplete="email" type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="where to write back" />
             </div>
           </div>
           <div className="field">
-            <label>Enquiry type</label>
-            <select value={form.kind} onChange={e => setForm({ ...form, kind: e.target.value })}>
+            <label htmlFor="cf-kind">Enquiry type</label>
+            <select id="cf-kind" name="kind" value={form.kind} onChange={e => setForm({ ...form, kind: e.target.value })}>
               <option>Commission</option>
               <option>Exhibition</option>
               <option>Collaboration</option>
@@ -57,8 +57,8 @@ function ContactPage() {
             </select>
           </div>
           <div className="field">
-            <label>Message</label>
-            <textarea value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="tell me about your idea, your space, or the question you've been carrying around…" />
+            <label htmlFor="cf-message">Message</label>
+            <textarea id="cf-message" name="message" value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="tell me about your idea, your space, or the question you've been carrying around…" />
           </div>
 
           <button type="submit" className="send-stamp" disabled={sending}>

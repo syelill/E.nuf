@@ -93,23 +93,69 @@ function CalendarIcon({ size = 14 }) {
 
 }
 
-// === Bottom Nav ===
+// === Bottom Nav (desktop/tablet pill + mobile hamburger) ===
 function BottomNav({ active, onChange }) {
   const items = ["Home", "Works", "CV", "Blog", "Contact"];
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
+
+  React.useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const select = (label) => { onChange(label.toLowerCase()); setOpen(false); };
+
   return (
-    <nav className="bottom-nav">
-      {items.map((label, i) =>
-      <React.Fragment key={label}>
+    <React.Fragment>
+      <nav className="bottom-nav" aria-label="Primary">
+        {items.map((label, i) =>
+        <React.Fragment key={label}>
+            <button
+            className={"bottom-nav__item" + (active === label.toLowerCase() ? " bottom-nav__item--active" : "")}
+            onClick={() => onChange(label.toLowerCase())}
+            aria-current={active === label.toLowerCase() ? "page" : undefined}>
+            
+              <span className={active === label.toLowerCase() ? "" : "hand-underline"}>{label}</span>
+            </button>
+            {i < items.length - 1 && <div className="bottom-nav__sep" />}
+          </React.Fragment>
+        )}
+      </nav>
+
+      <button
+        className={"nav-burger" + (open ? " nav-burger--open" : "")}
+        onClick={() => setOpen((o) => !o)}
+        aria-label={open ? "Close menu" : "Open menu"}
+        aria-expanded={open}
+        aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div
+        className={"nav-mobile-backdrop" + (open ? " is-open" : "")}
+        onClick={() => setOpen(false)}
+        aria-hidden={!open}>
+        
+        <nav id="mobile-menu" className="nav-mobile-panel" aria-label="Mobile navigation" onClick={(e) => e.stopPropagation()}>
+          {items.map((label) =>
           <button
-          className={"bottom-nav__item" + (active === label.toLowerCase() ? " bottom-nav__item--active" : "")}
-          onClick={() => onChange(label.toLowerCase())}>
-          
-            <span className={active === label.toLowerCase() ? "" : "hand-underline"}>{label}</span>
-          </button>
-          {i < items.length - 1 && <div className="bottom-nav__sep" />}
-        </React.Fragment>
-      )}
-    </nav>);
+            key={label}
+            className={"nav-mobile-item" + (active === label.toLowerCase() ? " is-active" : "")}
+            onClick={() => select(label)}
+            aria-current={active === label.toLowerCase() ? "page" : undefined}>
+            
+              {label}
+            </button>
+          )}
+        </nav>
+      </div>
+    </React.Fragment>);
 
 }
 
