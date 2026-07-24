@@ -1,3 +1,5 @@
+import emailjs from "@emailjs/browser";
+
 function ContactPage() {
   const [form, setForm] = React.useState({
     name: "",
