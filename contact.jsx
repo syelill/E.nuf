@@ -22,8 +22,8 @@ function ContactPage() {
 
     try {
       await emailjs.send(
-    "service_xxxxx",
-    "template_xxxxx",
+    "service_enuf",
+    "template_4rgw3yl",
     {
         from_name: form.name,
         reply_to: form.email,
