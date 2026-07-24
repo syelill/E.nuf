@@ -2947,4 +2947,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .archive-hero__stamp { display: none; }
   .fn-card__title, .artwork-popup__title { padding-right: 0; }
   .social-icon { width: 48px; height: 48px; }
+  .journal-nav { flex-wrap: wrap; row-gap: 14px; }
+  .journal-nav__dots { order: 3; width: 100%; justify-content: center; }
+  .journal-autoplay { width: 100%; justify-content: center; margin-top: 18px !important; }
 }
+
+/* Works page tape detail — scales down on smaller screens per breakpoints */
+.feature-row__tape { width: 90px; }
+@media (max-width: 1023px) { .feature-row__tape { width: 68px; } }
+@media (max-width: 767px) { .feature-row__tape { width: 54px; opacity: .75; } }

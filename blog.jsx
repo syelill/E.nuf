@@ -134,7 +134,7 @@ function BlogPage({ tweaks }) {
         </button>
       </div>
 
-      <div style={{ marginTop: 14, fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--pencil)', display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div className="journal-autoplay" style={{ marginTop: 14, fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--pencil)', display: 'flex', alignItems: 'center', gap: 8 }}>
         <span style={{ width: 6, height: 6, borderRadius: '50%', background: (paused || !autoplay) ? 'var(--pencil)' : 'var(--rust)', boxShadow: (paused || !autoplay) ? 'none' : '0 0 0 4px rgba(161,77,42,0.15)' }} />
         {!autoplay ? 'Autoplay off' : paused ? 'Autoplay paused' : `Auto-flipping every ${tweaks?.blogIntervalSec ?? 5}s`}
       </div>

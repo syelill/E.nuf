@@ -197,7 +197,7 @@ function FeatureRow({ work, number, reversed, onClick }) {
       }}
     >
       {/* tape detail */}
-      <div className="tape" style={{ top: -10, left: '50%', transform: 'translateX(-50%) rotate(-2deg)', width: 90, zIndex: 4 }} />
+      <div className="tape feature-row__tape" style={{ top: -10, left: '50%', transform: 'translateX(-50%) rotate(-2deg)', zIndex: 4 }} />
 
       {/* Image side */}
       <div style={{
@@ -360,11 +360,7 @@ function FeatureRow({ work, number, reversed, onClick }) {
 function GridView({ works, onOpenArtwork }) {
   if (works.length === 0) return <EmptyState />;
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-      gap: 28
-    }}>
+    <div className="works-grid">
       {works.map((a, i) => (
         <GridCard key={a.id} work={a} number={i + 1} onClick={() => onOpenArtwork(a)} />
       ))}

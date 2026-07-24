@@ -266,9 +266,10 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
   const computeCenter = React.useCallback(() => {
     const w = typeof window !== 'undefined' ? window.innerWidth : 1280;
     const h = typeof window !== 'undefined' ? window.innerHeight : 800;
+    const scale = w < 480 ? 0.56 : w < 768 ? 0.7 : w < 1024 ? 0.88 : 1;
     const cx = HOME_ANCHOR.x + HOME_ANCHOR.w / 2;
     const cy = HOME_ANCHOR.y + HOME_ANCHOR.h / 2;
-    return { x: w / 2 - cx, y: h / 2 - cy, scale: 1 };
+    return { x: w / 2 - cx * scale, y: h / 2 - cy * scale, scale };
   }, []);
 
   const initial = React.useMemo(() => computeCenter(), [computeCenter]);
