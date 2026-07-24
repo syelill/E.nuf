@@ -1,5 +1,5 @@
 emailjs.init({
-    publicKey: "bvHb8x4MyXn8o-uP9",
+    publicKey: "bedY2xBo31niInqLw",
 });
 
 function ContactPage() {
