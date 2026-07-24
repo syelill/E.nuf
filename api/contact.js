@@ -11,8 +11,8 @@ module.exports = async (req, res) => {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: 'E.NUF Studio <onboarding@resend.dev>',
-        to: ['chxxyl21@gmail.com'],
+        from: 'E.NUF Studio <hello@eunicehannah.com>',
+        to: ['hello@eunicehannah.com'],
         reply_to: email,
         subject: `New note from ${name || 'someone'} — ${kind || 'General'}`,
         text: `From: ${name || 'unknown'} <${email}>\nType: ${kind || 'General'}\n\n${message}`
