@@ -1,4 +1,6 @@
-import emailjs from "@emailjs/browser";
+emailjs.init({
+    publicKey: "bvHb8x4MyXn8o-uP9",
+});
 
 function ContactPage() {
   const [form, setForm] = React.useState({
@@ -20,16 +22,15 @@ function ContactPage() {
 
     try {
       await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
-        {
-          from_name: form.name,
-          reply_to: form.email,
-          enquiry_type: form.kind,
-          message: form.message,
-        },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
-      );
+    "service_xxxxx",
+    "template_xxxxx",
+    {
+        from_name: form.name,
+        reply_to: form.email,
+        enquiry_type: form.kind,
+        message: form.message,
+    }
+);
 
       setSent(true);
 
