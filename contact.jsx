@@ -22,7 +22,7 @@ function ContactPage() {
 
     try {
       await emailjs.send(
-    "service_enuf",
+    "service_07eht8l",
     "template_4rgw3yl",
     {
         from_name: form.name,
