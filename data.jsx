@@ -62,7 +62,7 @@ const ARTWORKS = [
     image: "assets/Stadetler x National Museum.jpg",
     alt: "Stadetler Collaboration on National Day artwork",
     ref: "ARCH-001",
-    category: "Community Engagement",
+    category: "Outdoor Murals",
     palette: 0,
     x: 1080, y: 100, w: 400, h: 380, rotation: -4
   },
@@ -79,7 +79,7 @@ const ARTWORKS = [
     image: "assets/NationalMuseum.JPG",
     alt: "National Museum artwork",
     ref: "ARCH-002",
-    category: "Outdoor Mural",
+    category: "Outdoor Murals",
     palette: 3,
     x: 1800, y: 80,  w: 340, h: 325, rotation: 3
   },
@@ -96,7 +96,7 @@ const ARTWORKS = [
     image: "assets/FlashC.jpg",
     alt: "Flash-C artwork",
     ref: "ARCH-003",
-    category: "Outdoor Mural",
+    category: "Outdoor Murals",
     palette: 4,
     x: 2520, y: 100, w: 320, h: 310, rotation: -2
   },
@@ -113,7 +113,7 @@ const ARTWORKS = [
     image: "assets/AMK Calm Corner.jpg",
     alt: "Calm Corner mural artwork",
     ref: "ARCH-004",
-    category: "Outdoor Mural",
+    category: "Outdoor Murals",
     palette: 3,
     x: 820,  y: 580, w: 280, h: 280, rotation: 4
   },
@@ -129,7 +129,7 @@ const ARTWORKS = [
     image: "assets/SCAPE SG60 Wall.jpg",
     alt: "Archive image — *SCAPE SG60 Wall",
     ref: "ARCH-005",
-    category: "Street Mural",
+    category: "Outdoor Murals",
     palette: 5,
     x: 2900, y: 520, w: 240, h: 390, rotation: 3
   },
@@ -145,7 +145,7 @@ const ARTWORKS = [
     image: "assets/SCAPE10000.jpg",
     alt: "Archive image — *SCAPE 10000",
     ref: "ARCH-006",
-    category: "Street Mural",
+    category: "Outdoor Murals",
     palette: 7,
     x: 920,  y: 1240, w: 220, h: 347, rotation: 5
   },
@@ -166,7 +166,7 @@ The phrase suggests that such virtue moves Heaven and Earth, drawing the mythica
     image: "assets/NECDC 201 Joo Chiat Mural.jpg",
     alt: "Radiance — 201 Joo Chiat Mural",
     ref: "ARCH-007",
-    category: "Mural",
+    category: "Outdoor Murals",
     palette: 0,
     x: 1620, y: 1240, w: 460, h: 398, rotation: -1
   },
@@ -183,7 +183,7 @@ The phrase suggests that such virtue moves Heaven and Earth, drawing the mythica
     image: "assets/NECDC SGPOOL.jpg",
     alt: "NECDC - Shaping Hearts artwork",
     ref: "ARCH-008",
-    category: "Community Engagement",
+    category: "Outdoor Murals",
     palette: 3,
     x: 2200, y: 1280, w: 400, h: 375, rotation: 2
   },
@@ -199,7 +199,7 @@ The phrase suggests that such virtue moves Heaven and Earth, drawing the mythica
     image: "assets/NECDC TAMPINES.jpg",
     alt: "Archive image — NECDC Tampines",
     ref: "ARCH-009",
-    category: "Mural",
+    category: "Outdoor Murals",
     palette: 2,
     x: 2780, y: 1300, w: 320, h: 283, rotation: -3
   },
@@ -218,7 +218,7 @@ Established in the 1980s as the “City of Books” (书城), the complex was a 
     image: "assets/genxyz.JPEG",
     alt: "Gen XYZ mural artwork",
     ref: "ARCH-010",
-    category: "Outdoor Mural",
+    category: "Outdoor Murals",
     palette: 4,
     x: 1900, y: 1720, w: 340, h: 297, rotation: 4
   },
@@ -249,72 +249,6 @@ const CANVAS_EXTRAS = [
     type: "tag",
     text: "ARCHIVE · 2022–2024",
     x: 1787, y: 1450, w: 220, rotation: -3
-  },
-];
-
-// === CV — World Archive & Career Locations ===
-// Locations show on the flat field map; each links related timeline entries
-// via the `related` matcher (substring match against exhibition titles).
-const COUNTRIES = [
-  {
-    id: "singapore",
-    country: "Singapore",
-    activeYear: "2024",
-    coords: { x: 778, y: 298 },
-    labelAnchor: "below",
-    palette: 0,
-    type: "Exhibitions · Public Art · Commissions",
-    summary: "Primary base for exhibitions, public art murals, commissions, and community works.",
-    tags: ["Exhibitions", "Public Art", "Commissions"],
-    related: ["Singapore", "INSTINC", "DECK", "ION", "Gillman", "Mizuma", "NAFA", "LASALLE", "SAM", "Goodman", "Arts House", "Substation", "OneRaffles", "VivoCity", "Scotts Square", "Pan Pacific", "Conrad", "Artspace222", "National Library", "City Square", "Coffee Connoisseur", "Grids", "Talent Cafe", "ANATA"]
-  },
-  {
-    id: "australia",
-    country: "Australia",
-    activeYear: "2018",
-    coords: { x: 850, y: 372 },
-    labelAnchor: "below",
-    palette: 3,
-    type: "Residency · Exhibition",
-    summary: "Artsource Fremantle Residency (Perth, WA), BigCi Residency (Sydney), and BigCi Open Day. Group exhibition at Abbotsford Convent, Melbourne.",
-    tags: ["Residency", "Exhibition", "Perth", "Sydney", "Melbourne"],
-    related: ["Australia", "Sydney", "Melbourne", "BigCi", "Abbotsford", "Fremantle", "Perth", "FLUX-KIT-MEL"]
-  },
-  {
-    id: "turkey",
-    country: "Türkiye",
-    activeYear: "2014",
-    coords: { x: 555, y: 200 },
-    labelAnchor: "right",
-    palette: 5,
-    type: "Exhibition",
-    summary: "sMall iDeas, FASS Gallery, Sabanci University, Tuzla, Turkey.",
-    tags: ["Exhibition", "Group Show"],
-    related: ["Turkey", "Türkiye", "Sabanci", "Tuzla", "sMall iDeas", "FASS"]
-  },
-  {
-    id: "new-york",
-    country: "New York",
-    activeYear: "2013",
-    coords: { x: 268, y: 168 },
-    labelAnchor: "left",
-    palette: 4,
-    type: "Exhibition · Archive",
-    summary: "The Story of the Creative (See.Me Gallery, Angel Orensanz Foundation of Contemporary Art) and The Sketchbook Project (Brooklyn Art Library).",
-    tags: ["Exhibition", "Archive"],
-    related: ["New York", "See.Me", "Angel Orensanz", "Brooklyn", "Sketchbook Project", "Image of Images"]
-  },
-  {
-    id: "beijing",
-    country: "Beijing",
-    activeYear: "2018",
-    coords: { x: 770, y: 175 },
-    labelAnchor: "right",
-    palette: 6,
-    type: "Artist-in-Residence Finalist",
-    summary: "Finalist for the Red Gate Gallery & Beijing City International School (BCIS) Artist-in-Residence programme, 2018.",
-    tags: ["Residency", "Finalist"],
-    related: ["Beijing", "Red Gate", "BCIS"]
   },
 ];
 
@@ -521,7 +455,7 @@ const ARTIST = {
 };
 
 Object.assign(window, {
-  ARTWORKS, CANVAS_EXTRAS, COUNTRIES, BLOG_POSTS, ARTIST,
+  ARTWORKS, CANVAS_EXTRAS, BLOG_POSTS, ARTIST,
   CV_BIO, CV_TIMELINE, CV_PRESS_PRINT, CV_PRESS_ONLINE, CV_COMMISSIONS, CV_AWARDS,
   ArtPlaceholder, ARTWORK_PALETTES
 });

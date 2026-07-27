@@ -2,15 +2,10 @@
 
 const MEDIUM_FILTERS = [
   "All",
-  "Outdoor Mural",
-  "Oil on Canvas",
-  "Mixed Media on Paper",
-  "Acrylic & Digital Print",
-  "Watercolour & Gouache",
-  "Illustration & Collage",
-  "Painting",
-  "Mixed Media",
-  "Digital & Traditional",
+  "Outdoor Murals",
+  "Indoor Murals",
+  "Paintings & Installations",
+  "Digital Illustrations",
 ];
 
 // Matches a work against the active filter. Checks both `category` and `tags`
@@ -44,9 +39,9 @@ function WorksPage({ onOpenArtwork }) {
           fontSize: 'clamp(70px, 11vw, 168px)', lineHeight: 0.88,
           letterSpacing: '-0.035em', margin: 0, color: 'var(--ink)'
         }}>
-          All Works<span style={{ color: 'var(--gold)' }}>.</span>
+          Artworks<span style={{ color: 'var(--gold)' }}>.</span>
         </h1>
-        <div style={{
+        <div className="works-intro" style={{
           marginTop: 14, fontFamily: 'var(--hand)', fontSize: 26,
           color: 'var(--ink-soft)', maxWidth: 560, lineHeight: 1.25
         }}>
@@ -61,7 +56,7 @@ function WorksPage({ onOpenArtwork }) {
         gap: 18, flexWrap: 'wrap', marginBottom: 40,
         paddingBottom: 22, borderBottom: '1px dashed rgba(31,27,21,0.28)'
       }}>
-        <div className="filter-pills" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, flex: '1 1 auto', minWidth: 0 }}>
+        <div className="filter-pills" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, flex: '1 1 auto', minWidth: 0, minHeight: 0 }}>
           {MEDIUM_FILTERS.map(f => {
             const active = filter === f;
             return (
@@ -196,11 +191,8 @@ function FeatureRow({ work, number, reversed, onClick }) {
         position: 'relative',
       }}
     >
-      {/* tape detail */}
-      <div className="tape feature-row__tape" style={{ top: -10, left: '50%', transform: 'translateX(-50%) rotate(-2deg)', zIndex: 4 }} />
-
       {/* Image side */}
-      <div style={{
+      <div className="feature-row__media" style={{
         gridColumn: reversed ? 2 : 1,
         gridRow: 1,
         position: 'relative',
@@ -265,7 +257,7 @@ function FeatureRow({ work, number, reversed, onClick }) {
       </div>
 
       {/* Details side */}
-      <div style={{
+      <div className="feature-row__body" style={{
         gridColumn: reversed ? 1 : 2,
         gridRow: 1,
         padding: 'clamp(28px, 4vw, 56px)',

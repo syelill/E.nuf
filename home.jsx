@@ -165,8 +165,6 @@ function FrameInner({ a }) {
         <span>{a.title}</span>
         <small>{a.ref || a.year}</small>
       </div>
-      <div className="tape" style={{ top: -10, left: 30, transform: 'rotate(-4deg)' }} />
-      <div className="tape" style={{ top: -10, right: 24, transform: 'rotate(6deg)', width: 50 }} />
     </div>);
 
 }
@@ -200,7 +198,6 @@ function StickyInner({ n }) {
 function PaperNoteInner({ n }) {
   return (
     <div className="paper-note" style={{ height: '100%', whiteSpace: 'pre-line', lineHeight: 1.15 }}>
-      <div className="tape" style={{ top: -10, left: 30, transform: 'rotate(-3deg)', width: 60 }} />
       {n.text}
     </div>);
 
@@ -266,7 +263,7 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
   const computeCenter = React.useCallback(() => {
     const w = typeof window !== 'undefined' ? window.innerWidth : 1280;
     const h = typeof window !== 'undefined' ? window.innerHeight : 800;
-    const scale = w < 480 ? 0.56 : w < 768 ? 0.7 : w < 1024 ? 0.88 : 1;
+    const scale = w < 480 ? 0.62 : w < 768 ? 0.78 : w < 1024 ? 0.9 : 1;
     const cx = HOME_ANCHOR.x + HOME_ANCHOR.w / 2;
     const cy = HOME_ANCHOR.y + HOME_ANCHOR.h / 2;
     return { x: w / 2 - cx * scale, y: h / 2 - cy * scale, scale };
@@ -275,10 +272,13 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
   const initial = React.useMemo(() => computeCenter(), [computeCenter]);
   const { transform, onPointerDown, onPointerMove, onPointerUp, onPointerCancel, animateTo, setTransformImmediate } = useDraggableCanvas(initial);
 
+  const [isMobile, setIsMobile] = React.useState(() => typeof window !== 'undefined' && window.innerWidth < 768);
+
   // Keep the anchor centered on resize (only if user hasn't manually wandered far)
   React.useEffect(() => {
     const onResize = () => {
       setTransformImmediate(computeCenter());
+      setIsMobile(window.innerWidth < 768);
     };
     // only run once on mount for clean recenter; window resize is best-effort
     window.addEventListener('resize', onResize);
@@ -333,7 +333,8 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
         
         {tweaks?.showGrid !== false && <div className="canvas-grid" />}
 
-        {/* Title block (the home anchor) */}
+        {/* Title block (the home anchor) — desktop/tablet only; mobile uses the fixed .mobile-hero below */}
+        {!isMobile &&
         <div className="title-block" style={{ left: HOME_ANCHOR.x, top: HOME_ANCHOR.y, transform: `scale(${tweaks?.titleScale ?? 1})`, transformOrigin: 'left center' }} data-no-drag>
           <h1 className="title-block__main">E.NUF</h1>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10 }}>
@@ -353,12 +354,15 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
             </button>
           </div>
         </div>
+        }
 
-        {/* Drag hint — sits ~60px below the title cluster, part of the same composition */}
+        {/* Drag hint — desktop/tablet only (see .mobile-hero__hint for mobile) */}
+        {!isMobile &&
         <div className="drag-hint" style={{ left: HOME_ANCHOR.x, top: HOME_ANCHOR.y + 260, maxWidth: 520 }}>
           <HandPointerIcon size={28} />
           <span style={{ margin: 0, padding: 0, lineHeight: 1.45 }}>drag around to explore the archive — pieces are loose, rearrange the wall</span>
         </div>
+        }
 
         {/* Section markers — sit outside the title's safe zone */}
         <div style={{ position: 'absolute', left: 880, top: 1180, fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.3em', color: 'var(--pencil)' }}>
@@ -394,11 +398,28 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
         </div>
       </div>
 
+      {/* Mobile hero — fixed, centered: logo → title → about → hint. Never part of the scaled canvas world. */}
+      {isMobile &&
+      <div className="mobile-hero" data-no-drag>
+        <ArtistAvatar onClick={onOpenArtist} />
+        <h1 className="mobile-hero__title">E.NUF</h1>
+        <button onClick={onOpenArtist} onPointerDown={(e) => e.stopPropagation()} data-no-drag className="mobile-hero__about">
+          <MouseClickIcon size={14} />
+          <span className="hand-underline">About me</span>
+        </button>
+        <p className="mobile-hero__hint">
+          <HandPointerIcon size={20} />
+          <span>drag around to explore the archive — pieces are loose, rearrange the wall</span>
+        </p>
+      </div>
+      }
+
       {/* Return home button — fixed overlay, outside the world */}
       <button
         onClick={(e) => {e.stopPropagation();recenter();}}
         onPointerDown={(e) => e.stopPropagation()}
         data-no-drag
+        className="recenter-btn"
         title="Return to E.NUF"
         style={{
           position: 'fixed',

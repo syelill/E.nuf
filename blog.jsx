@@ -4,8 +4,6 @@ function JournalSketch({ palette, seed, label }) {
   return (
     <div className="journal-sketch">
       <ArtPlaceholder palette={ARTWORK_PALETTES[palette]} seed={seed + 50} label={label} />
-      <div className="tape" style={{ top: -10, left: 30, transform: 'rotate(-3deg)' }} />
-      <div className="tape" style={{ top: -10, right: 24, transform: 'rotate(4deg)', width: 50 }} />
     </div>
   );
 }
