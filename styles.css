@@ -416,33 +416,75 @@ button { font-family: inherit; cursor: pointer; }
   pointer-events: none;
 }
 
-/* Title block */
-.title-block {
-  position: absolute;
+/* === Home hero — one grouped composition, centred on the VIEWPORT ==========
+   Lives outside .canvas-world (so panning never moves or scales it) and is
+   pointer-events:none apart from its two controls, so the archive wall stays
+   draggable straight through it. */
+.home-page { position: relative; width: 100%; max-width: 100%; overflow: hidden; }
+.home-hero-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.home-hero {
+  width: min(860px, calc(100vw - 80px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+}
+.home-hero__main {
   display: flex;
   align-items: center;
-  gap: 36px;
+  justify-content: center;
+  gap: clamp(20px, 2.2vw, 34px);
+  transform-origin: center;
 }
 .title-block__main {
   font-family: var(--serif);
   font-weight: 900;
-  font-size: clamp(120px, 15vw, 220px);
+  font-size: clamp(120px, 14vw, 230px);
   line-height: 0.85;
   letter-spacing: -0.04em;
   color: var(--ink);
   margin: 0;
   font-style: italic;
+  white-space: nowrap;
 }
-  align-items: flex-end;
-  gap: 30px;
+.home-about-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+  pointer-events: auto;
 }
-.title-block__sub {
+.home-about-link {
+  background: transparent;
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-family: var(--hand);
-  font-size: 28px;
+  font-size: 22px;
   color: var(--ink-soft);
-  max-width: 280px;
-  line-height: 1.2;
+  cursor: pointer;
+  pointer-events: auto;
 }
+.home-hero .home-hero__instruction {
+  position: static;
+  max-width: 600px;
+  margin-top: clamp(30px, 5vh, 58px);
+  text-align: left;
+  pointer-events: none;
+}
+.home-about-group .avatar, .home-about-link { pointer-events: auto; cursor: pointer; position: relative; z-index: 2; }
 
 /* Avatar */
 .avatar {
@@ -2604,120 +2646,103 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .works-intro { display: none; }
 }
 
-/* === Mobile home hero (logo → title → about → hint), replaces canvas title-block below 768px === */
-.mobile-hero { display: none; }
+/* === Mobile home (<768px) — SAME hero composition, fluidly resized =========
+   One shared .home-hero for every width; only type, gaps and the logo size
+   change here. The wall stays draggable behind the fixed overlay. */
 @media (max-width: 767px) {
-  .mobile-hero {
+  .home-hero { width: calc(100vw - 32px); max-width: 430px; margin: 0 auto; }
+  .home-hero__main { width: 100%; gap: clamp(10px, 3vw, 18px); }
+  .title-block__main { font-size: clamp(58px, 19vw, 88px); line-height: 0.88; white-space: nowrap; margin: 0; flex-shrink: 1; }
+  .home-about-group { flex-shrink: 0; gap: 0; }
+  .home-about-group .avatar {
+    width: clamp(52px, 15vw, 72px) !important;
+    height: clamp(52px, 15vw, 72px) !important;
+    aspect-ratio: 1;
+    border-radius: 50%;
+  }
+  .home-about-group .avatar img { width: 100%; height: 100%; object-fit: contain; }
+  .home-about-link { margin-top: 6px; font-size: clamp(14px, 4vw, 17px); white-space: nowrap; text-align: center; }
+  .home-hero__instruction {
+    width: min(310px, calc(100vw - 48px));
+    max-width: none;
+    margin-top: clamp(24px, 6vw, 36px);
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    text-align: center;
-    gap: clamp(14px, 3.5vw, 20px);
-    position: fixed;
-    left: 0; right: 0;
-    top: auto;
-    bottom: 0;
-    width: 100%;
-    max-width: 100%;
-    padding: clamp(44px, 9vh, 72px) 24px clamp(26px, 5vh, 38px);
-    /* opaque paper band: the draggable archive artwork passes BEHIND this,
-       so it can never cover the logo / title / about label */
-    background: linear-gradient(to bottom, rgba(244,236,220,0) 0%, rgba(244,236,220,0.92) 18%, #f4ecdc 34%, #f4ecdc 100%);
-    z-index: 95;
-    pointer-events: none;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 9px;
+    font-size: clamp(12px, 3.4vw, 15px);
+    text-align: left;
+    line-height: 1.55;
   }
-  .mobile-hero > * { position: relative; z-index: 2; margin-left: auto; margin-right: auto; }
-  /* Redundant on mobile (hero is always visible) and it was intercepting taps
-     on the logo's top-left at 320–375px — hide it below 768px. */
-  .recenter-btn { display: none !important; }
-  .mobile-hero .avatar { width: clamp(56px, 16vw, 76px); height: clamp(56px, 16vw, 76px); pointer-events: auto; position: relative; z-index: 2; cursor: pointer; touch-action: manipulation; }
-  .mobile-hero__title {
-    font-family: var(--serif);
-    font-style: italic;
-    font-weight: 900;
-    font-size: clamp(44px, 15vw, 68px);
-    line-height: 0.9;
-    letter-spacing: -0.03em;
-    color: var(--ink);
-    margin: 0;
-  }
-  .mobile-hero__about {
-    background: transparent;
-    border: none;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--hand);
-    font-size: clamp(18px, 4.6vw, 22px);
-    color: var(--ink-soft);
-    cursor: pointer;
-    pointer-events: auto;
-  }
-  .mobile-hero__hint {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--hand);
-    font-size: clamp(15px, 4vw, 18px);
-    color: var(--ink-soft);
-    max-width: 280px;
-    line-height: 1.4;
-    margin: 0;
-  }
+  .home-hero__instruction svg { width: 20px; height: 20px; flex: 0 0 auto; margin-top: 2px; }
+  .recenter-btn { top: 20px !important; left: 20px !important; }
 }
 
-/* === Phone (<768px): CV bio returns to normal document flow ===============
-   Overrides the ≤1024px side-by-side row so the heading is never clipped and
-   the text uses the full phone width. Portrait card sits centred in flow. */
+/* === Phone (<768px): CV header — photo left, biography right ================
+   `.cv-head__col` becomes `display: contents` so the eyebrow, title, buttons,
+   bio and the portrait card are all items of ONE grid. Eyebrow / title /
+   buttons span both columns; the last row is portrait (42%) + bio (58%).
+   No absolute positioning, no transforms for placement. */
 @media (max-width: 767px) {
   html, body { overflow-x: hidden; }
-  .cv-page { padding: clamp(56px, 12vw, 76px) 24px clamp(100px, 14vw, 140px); }
+  .cv-page {
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    padding: clamp(52px, 11vw, 72px) 16px clamp(100px, 14vw, 140px);
+  }
   .cv-head--split {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+    column-gap: 12px;
+    row-gap: 0;
+    align-items: start;
     position: relative;
     width: 100%;
     max-width: 100%;
     height: auto;
     min-height: 0;
-    gap: 24px;
+    margin: 0 auto 40px;
     padding-bottom: 32px;
-    margin-bottom: 40px;
+    box-sizing: border-box;
   }
-  .cv-head--split > * { max-width: 100%; }
-  .cv-head--split .cv-head__col {
+  .cv-head--split > *, .cv-head--split .cv-head__col > * { max-width: 100%; min-width: 0; }
+  /* dissolve the desktop text column so its children join the grid */
+  .cv-head--split .cv-head__col { display: contents; }
+
+  .cv-head__top { grid-column: 1 / -1; grid-row: 1; margin-bottom: 14px; }
+  .cv-head__title { grid-column: 1 / -1; grid-row: 2; margin: 0 0 18px; font-size: clamp(40px, 12vw, 60px); line-height: 1.04; overflow-wrap: break-word; }
+  .cv-head__actions { grid-column: 1 / -1; grid-row: 3; display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 28px; }
+
+  .cv-portrait {
+    grid-column: 1;
+    grid-row: 4;
+    align-self: start;
     position: relative;
-    order: 1;
-    flex: 0 1 auto;
+    inset: auto;
     width: 100%;
     max-width: 100%;
     margin: 0;
-    inset: auto;
-    transform: none;
-    align-items: stretch;
-    text-align: left;
-    gap: 18px;
+    transform: rotate(-1.5deg);
+    filter: drop-shadow(0 10px 18px rgba(60, 45, 20, 0.28));
   }
-  .cv-head__title { margin: 0; font-size: clamp(42px, 13vw, 64px); line-height: 1.04; overflow-wrap: break-word; }
-  .cv-head__bio { width: 100%; max-width: 100%; }
-  .cv-head__bio p { font-size: 16px; line-height: 1.72; }
-  .cv-head__actions { flex-wrap: wrap; gap: 12px; }
+  .cv-portrait__frame { padding: 7px 7px 0; border-radius: 4px; }
+  .cv-portrait__img { width: 100%; height: auto; max-height: none; object-fit: contain; object-position: center; }
+  .cv-portrait__caption { padding: 7px 4px 9px; }
+  .cv-portrait__caption-title { font-size: 13px; }
+  .cv-portrait__caption-sub { font-size: 6.5px; letter-spacing: 0.18em; }
 
-  .cv-portrait {
-    position: relative;
-    order: 2;
-    inset: auto;
+  .cv-head__bio {
+    grid-column: 2;
+    grid-row: 4;
     width: 100%;
-    max-width: 300px;
-    margin: 24px auto 0;
-    transform: rotate(1deg);
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
   }
-  .cv-portrait__frame { padding: 12px 12px 0; }
-  .cv-portrait__img { max-height: none; height: auto; object-fit: contain; object-position: center; }
-  .cv-portrait__caption { padding: 12px 8px 14px; }
-  .cv-portrait__caption-title { font-size: 19px; }
-  .cv-portrait__caption-sub { font-size: 8px; letter-spacing: 0.24em; }
+  .cv-head__bio p { font-size: clamp(13.5px, 3.9vw, 15.5px); line-height: 1.62; margin: 0 0 14px !important; text-wrap: pretty; }
+  .cv-head__bio p:last-child { margin-bottom: 0 !important; }
 }

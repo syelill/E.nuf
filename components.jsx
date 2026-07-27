@@ -162,7 +162,7 @@ function BottomNav({ active, onChange }) {
 // === Artist avatar ===
 function ArtistAvatar({ onClick }) {
   return (
-    <button className="avatar wiggle" onClick={onClick} onPointerDown={(e) => e.stopPropagation()} data-no-drag type="button" aria-label="About the artist" style={{ backgroundImage: "initial", backgroundPosition: "initial", backgroundSize: "initial", backgroundRepeat: "initial", backgroundAttachment: "initial", backgroundOrigin: "initial", backgroundClip: "initial", borderWidth: "0px", width: "100px", background: "rgb(179, 37, 38)" }}>
+    <button className="avatar wiggle" onClick={onClick} onPointerDown={(e) => e.stopPropagation()} data-no-drag type="button" aria-label="About the artist" style={{ backgroundImage: "initial", backgroundPosition: "initial", backgroundSize: "initial", backgroundRepeat: "initial", backgroundAttachment: "initial", backgroundOrigin: "initial", backgroundClip: "initial", borderWidth: "0px", width: "100px", height: "100px", background: "rgb(179, 37, 38)" }}>
       <img
         src="assets/enuf-stamp.png"
         alt="E.NUF artist stamp"

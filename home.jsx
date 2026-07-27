@@ -234,6 +234,32 @@ function HandArrow({ x1, y1, x2, y2, label }) {
 // Title block anchor — used both for placement and for recentering.
 const HOME_ANCHOR = { x: 1700, y: 700, w: 620, h: 220 };
 
+// On phones the wall was authored at desktop spacing, so pull every piece
+// closer to the anchor (positions only — sizes and rotations untouched) so the
+// archive frames the fixed hero instead of sitting off-screen.
+const MOBILE_SQUEEZE = 0.62;
+// canvas-unit half-extents of the fixed hero's safe zone on phones
+const MOBILE_SAFE = { w: 345, h: 230 };
+function clearHeroZone(it, safe) {
+  if (!safe) return it;
+  const ax = HOME_ANCHOR.x + HOME_ANCHOR.w / 2;
+  const ay = HOME_ANCHOR.y + HOME_ANCHOR.h / 2;
+  const extra = it.kind === 'frame' ? 80 : it.kind === 'polaroid' ? 60 : 0;
+  const iw = it.w || 200, ih = (it.h || 180) + extra;
+  const dx = it.x + iw / 2 - ax, dy = it.y + ih / 2 - ay;
+  const needX = safe.w + iw / 2, needY = safe.h + ih / 2;
+  if (Math.abs(dx) >= needX || Math.abs(dy) >= needY) return it;
+  const pushX = needX - Math.abs(dx), pushY = needY - Math.abs(dy);
+  if (pushX <= pushY) return { ...it, x: Math.round(it.x + (dx < 0 ? -pushX : pushX)) };
+  return { ...it, y: Math.round(it.y + (dy < 0 ? -pushY : pushY)) };
+}
+function squeezeToAnchor(it, k) {
+  if (!k || k === 1) return it;
+  const ax = HOME_ANCHOR.x + HOME_ANCHOR.w / 2;
+  const ay = HOME_ANCHOR.y + HOME_ANCHOR.h / 2;
+  return { ...it, x: Math.round(ax + (it.x - ax) * k), y: Math.round(ay + (it.y - ay) * k) };
+}
+
 // Push a sticky / paper-note item away from the title's center
 // so it never crowds the wordmark. `amount` is 0..1.
 function repelFromAnchor(it, amount) {
@@ -256,6 +282,53 @@ function repelFromAnchor(it, amount) {
     x: ax + dx * k - (it.w || 0) / 2,
     y: ay + dy * k - (it.h || 0) / 2
   };
+}
+
+/* Return-to-top / recenter overlay — shared by desktop canvas and mobile flow */
+function ReturnHomeButton({ onClick, compact }) {
+  return (
+    <button
+      onClick={(e) => {e.stopPropagation();onClick();}}
+      onPointerDown={(e) => e.stopPropagation()}
+      data-no-drag
+      className="recenter-btn"
+      title="Return to E.NUF"
+      style={{
+        position: 'fixed',
+        top: compact ? 20 : 22,
+        left: compact ? 20 : 22,
+        zIndex: compact ? 120 : 90,
+        background: 'var(--paper)',
+        border: '1px solid var(--ink)',
+        borderRadius: 999,
+        padding: compact ? '8px 13px 8px 10px' : '10px 16px 10px 12px',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: compact ? 8 : 10,
+        fontFamily: 'var(--mono)',
+        fontSize: compact ? 9 : 10,
+        letterSpacing: '0.22em',
+        textTransform: 'uppercase',
+        color: 'var(--ink)',
+        cursor: 'pointer',
+        boxShadow: 'var(--shadow-card)',
+        transition: 'transform .15s ease'
+      }}
+      onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-1px) rotate(-1deg)'}
+      onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0) rotate(0deg)'}>
+
+      <span style={{
+        width: compact ? 18 : 22, height: compact ? 18 : 22, borderRadius: '50%',
+        background: 'var(--ink)', color: 'var(--paper)',
+        display: 'grid', placeItems: 'center',
+        fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 900,
+        fontSize: compact ? 10 : 12, letterSpacing: 0, flex: '0 0 auto'
+      }}>
+        E
+      </span>
+      Return to E.NUF
+    </button>);
+
 }
 
 function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
@@ -288,10 +361,15 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
   const recenter = () => animateTo(computeCenter(), 700);
 
   // Live positions for artworks + extras, plus z-order
-  const [items, setItems] = React.useState(() => [
-  ...ARTWORKS.filter((a) => a.x !== undefined).map((a) => ({ ...a, kind: a.type === 'polaroid' ? 'polaroid' : 'frame' })),
-  ...CANVAS_EXTRAS.map((n) => ({ ...n, kind: n.type }))]
-  );
+  const [items, setItems] = React.useState(() => {
+    const phone = typeof window !== 'undefined' && window.innerWidth < 768;
+    const k = phone ? MOBILE_SQUEEZE : 1;
+    const safe = phone ? MOBILE_SAFE : null;
+    const place = (it) => clearHeroZone(squeezeToAnchor(it, k), safe);
+    return [
+    ...ARTWORKS.filter((a) => a.x !== undefined).map((a) => place({ ...a, kind: a.type === 'polaroid' ? 'polaroid' : 'frame' })),
+    ...CANVAS_EXTRAS.map((n) => place({ ...n, kind: n.type }))];
+  });
   const [order, setOrder] = React.useState(() => items.map((i) => i.id));
 
   // When the "notes pushed from title" tweak changes, snap sticky/paper-note items
@@ -317,13 +395,14 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
   };
 
   return (
-    <div
-      className="canvas-stage"
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerCancel}>
-      
+    <div className="home-page">
+      <div
+        className="canvas-stage"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerCancel}>
+
       <style>{`
         .canvas-stage[data-dragging="1"] { cursor: grabbing !important; }
       `}</style>
@@ -333,36 +412,6 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
         
         {tweaks?.showGrid !== false && <div className="canvas-grid" />}
 
-        {/* Title block (the home anchor) — desktop/tablet only; mobile uses the fixed .mobile-hero below */}
-        {!isMobile &&
-        <div className="title-block" style={{ left: HOME_ANCHOR.x, top: HOME_ANCHOR.y, transform: `scale(${tweaks?.titleScale ?? 1})`, transformOrigin: 'left center' }} data-no-drag>
-          <h1 className="title-block__main">E.NUF</h1>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10 }}>
-            <ArtistAvatar onClick={onOpenArtist} />
-            <button
-              onClick={onOpenArtist}
-              data-no-drag
-              style={{
-                background: 'transparent', border: 'none', padding: 0,
-                display: 'flex', alignItems: 'center', gap: 8,
-                fontFamily: 'var(--hand)', fontSize: 22, color: 'var(--ink-soft)',
-                cursor: 'pointer'
-              }}>
-
-              <MouseClickIcon size={14} />
-              <span className="hand-underline">About me</span>
-            </button>
-          </div>
-        </div>
-        }
-
-        {/* Drag hint — desktop/tablet only (see .mobile-hero__hint for mobile) */}
-        {!isMobile &&
-        <div className="drag-hint" style={{ left: HOME_ANCHOR.x, top: HOME_ANCHOR.y + 260, maxWidth: 520 }}>
-          <HandPointerIcon size={28} />
-          <span style={{ margin: 0, padding: 0, lineHeight: 1.45 }}>drag around to explore the archive — pieces are loose, rearrange the wall</span>
-        </div>
-        }
 
         {/* Section markers — sit outside the title's safe zone */}
         <div style={{ position: 'absolute', left: 880, top: 1180, fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.3em', color: 'var(--pencil)' }}>
@@ -398,64 +447,30 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
         </div>
       </div>
 
-      {/* Mobile hero — fixed, centered: logo → title → about → hint. Never part of the scaled canvas world. */}
-      {isMobile &&
-      <div className="mobile-hero" data-no-drag>
-        <ArtistAvatar onClick={onOpenArtist} />
-        <h1 className="mobile-hero__title">E.NUF</h1>
-        <button onClick={onOpenArtist} onPointerDown={(e) => e.stopPropagation()} data-no-drag className="mobile-hero__about">
-          <MouseClickIcon size={14} />
-          <span className="hand-underline">About me</span>
-        </button>
-        <p className="mobile-hero__hint">
-          <HandPointerIcon size={20} />
-          <span>drag around to explore the archive — pieces are loose, rearrange the wall</span>
-        </p>
       </div>
-      }
+
+      {/* Hero — fixed overlay, SIBLING of the stage: never inherits the pan */}
+      <div className="home-hero-overlay">
+        <div className="home-hero">
+          <div className="home-hero__main" style={{ transform: `scale(${tweaks?.titleScale ?? 1})` }}>
+            <h1 className="title-block__main">E.NUF</h1>
+            <div className="home-about-group">
+              <ArtistAvatar onClick={onOpenArtist} />
+              <button className="home-about-link" onClick={onOpenArtist} data-no-drag type="button">
+                <MouseClickIcon size={14} />
+                <span className="hand-underline">About me</span>
+              </button>
+            </div>
+          </div>
+          <div className="drag-hint home-hero__instruction">
+            <HandPointerIcon size={28} />
+            <span style={{ margin: 0, padding: 0, lineHeight: 1.45 }}>drag around to explore the archive — pieces are loose, rearrange the wall</span>
+          </div>
+        </div>
+      </div>
 
       {/* Return home button — fixed overlay, outside the world */}
-      <button
-        onClick={(e) => {e.stopPropagation();recenter();}}
-        onPointerDown={(e) => e.stopPropagation()}
-        data-no-drag
-        className="recenter-btn"
-        title="Return to E.NUF"
-        style={{
-          position: 'fixed',
-          top: 22,
-          left: 22,
-          zIndex: 90,
-          background: 'var(--paper)',
-          border: '1px solid var(--ink)',
-          borderRadius: 999,
-          padding: '10px 16px 10px 12px',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 10,
-          fontFamily: 'var(--mono)',
-          fontSize: 10,
-          letterSpacing: '0.22em',
-          textTransform: 'uppercase',
-          color: 'var(--ink)',
-          cursor: 'pointer',
-          boxShadow: 'var(--shadow-card)',
-          transition: 'transform .15s ease'
-        }}
-        onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-1px) rotate(-1deg)'}
-        onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0) rotate(0deg)'}>
-        
-        <span style={{
-          width: 22, height: 22, borderRadius: '50%',
-          background: 'var(--ink)', color: 'var(--paper)',
-          display: 'grid', placeItems: 'center',
-          fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 900,
-          fontSize: 12, letterSpacing: 0
-        }}>
-          E
-        </span>
-        Return to E.NUF
-      </button>
+      <ReturnHomeButton onClick={recenter} compact={isMobile} />
     </div>);
 
 }

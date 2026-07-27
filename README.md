@@ -14,7 +14,6 @@ E.NUF Portfolio.html     → original working file (kept for the editor)
 styles.css               → all styling
 *.jsx                    → React views (loaded via <script type="text/babel">)
 assets/                  → images + CV PDF
-api/contact.js           → Vercel serverless function that emails contact-form submissions
 ```
 
 ## Deploying to Vercel
@@ -33,26 +32,26 @@ Because there is no build, deploy it as a plain static project.
 These are also pinned in [`vercel.json`](./vercel.json), so a fresh import will
 pick them up automatically — just click **Deploy**.
 
-The root URL (`/`) serves `index.html`. The `api/contact.js` serverless
-function deploys automatically alongside the static files — no extra config
-needed, it just needs the environment variable below.
+The root URL (`/`) serves `index.html`. There is no server code — the whole
+site is static files.
 
-### Contact form (emails you the submissions, no database)
+### Contact form (EmailJS, sent straight from the browser)
 
-The form posts to `/api/contact`, a small Vercel serverless function that
-sends the message to `hello@eunicehannah.com` via [Resend](https://resend.com)
-(free tier is enough for a portfolio's volume).
+The form sends through [EmailJS](https://www.emailjs.com) — no serverless
+function, no API key on a server, nothing to configure in Vercel.
 
-1. Sign up at resend.com and create an API key.
-2. In Vercel: **Project Settings → Environment Variables** → add
-   `RESEND_API_KEY` = your key.
-3. Redeploy. Submissions arrive by email; the sender defaults to Resend's
-   shared `onboarding@resend.dev` address until you verify your own domain
-   with Resend (optional — add `eunicehannah.com` in their Domains tab and
-   point the DNS records they give you).
+IDs live at the top of `contact.jsx`:
 
-If `RESEND_API_KEY` is missing, the form shows a friendly error asking people
-to email you directly — the site still works, it just won't auto-send.
+| Value       | ID                  |
+| ----------- | ------------------- |
+| Public key  | `bedY2xBo31niInqLw` |
+| Service     | `service_07eht8l`   |
+| Template    | `template_4rgw3yl`  |
+
+The template expects these variables: `from_name`, `reply_to`,
+`enquiry_type`, `message`. The SDK is loaded in `index.html` before the
+views. If a send fails, the form shows the error and asks people to email
+hello@eunicehannah.com directly.
 
 ### Custom domain (www.eunicehannah.com)
 

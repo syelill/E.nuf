@@ -239,12 +239,6 @@ const CANVAS_EXTRAS = [
     x: 2501, y: 932, w: 240, h: 200, rotation: 5
   },
   {
-    id: "note-3",
-    type: "sticky",
-    text: "studio days:\ntues / thurs",
-    x: 1309, y: 508, w: 180, h: 160, rotation: 4
-  },
-  {
     id: "arch-tag",
     type: "tag",
     text: "ARCHIVE · 2022–2024",

@@ -129,7 +129,7 @@ function CVPage() {
               src="assets/EuniceImage.png"
               alt="Eunice Hannah Lim, holding a paintbrush"
               draggable={false}
-              loading="lazy"
+              loading="eager"
               className="cv-portrait__img" style={{ objectFit: "cover" }} />
             
           </div>
