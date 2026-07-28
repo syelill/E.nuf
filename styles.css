@@ -475,6 +475,55 @@ html.home-locked #root { height: 100%; }
   text-align: center;
   pointer-events: none;
 }
+
+/* ============================================================
+   Stationary protected area behind the E.NUF hero
+
+   The archive canvas can move behind this area, but photographs,
+   notes and cards will not visually overlap the E.NUF composition.
+   Does not change the existing hero design or positioning.
+   ============================================================ */
+
+.home-hero {
+  isolation: isolate;
+}
+
+/* Soft paper clearing behind the stationary hero */
+.home-hero::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: min(920px, calc(100vw - 32px));
+  height: clamp(300px, 46vh, 470px);
+
+  transform: translate(-50%, -50%);
+
+  z-index: 0;
+  pointer-events: none;
+
+  /*
+    Same warm paper colour as the canvas.
+    The faded edge prevents it from looking like a rectangular card.
+  */
+  background: radial-gradient(
+    ellipse at center,
+    rgba(244, 236, 220, 1) 0%,
+    rgba(244, 236, 220, 0.99) 55%,
+    rgba(244, 236, 220, 0.92) 70%,
+    rgba(244, 236, 220, 0.65) 84%,
+    rgba(244, 236, 220, 0) 100%
+  );
+}
+
+/* Keep the existing E.NUF design above the protected paper area */
+.home-hero__main,
+.home-hero__instruction {
+  position: relative;
+  z-index: 1;
+}
+
 .home-hero__main {
   display: flex;
   align-items: center;
@@ -2650,8 +2699,19 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .nav-mobile-item.is-active { color: var(--ink); font-weight: 700; }
 
 @media (max-width: 767px) {
-  .bottom-nav { display: none; }
-  .nav-burger { display: flex; }
+  .home-hero::before {
+    width: calc(100vw - 8px);
+    height: clamp(260px, 40vh, 340px);
+
+    background: radial-gradient(
+      ellipse at center,
+      rgba(244, 236, 220, 1) 0%,
+      rgba(244, 236, 220, 0.99) 58%,
+      rgba(244, 236, 220, 0.90) 74%,
+      rgba(244, 236, 220, 0.55) 87%,
+      rgba(244, 236, 220, 0) 100%
+    );
+  }
 }
 @media (min-width: 768px) {
   .nav-burger { display: none; }
