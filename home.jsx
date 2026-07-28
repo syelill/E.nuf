@@ -7,6 +7,8 @@ function useDraggableCanvas(initial) {
   const onPointerDown = (e) => {
     // ignore clicks on canvas items
     if (e.target.closest('[data-canvas-item]') || e.target.closest('[data-no-drag]')) return;
+    // stop the browser claiming the gesture as a page scroll (mobile URL-bar shift)
+    if (e.cancelable) e.preventDefault();
     stateRef.current.dragging = true;
     stateRef.current.last = { x: e.clientX, y: e.clientY, t: performance.now() };
     stateRef.current.vx = 0;stateRef.current.vy = 0;
@@ -294,10 +296,11 @@ function ReturnHomeButton({ onClick, compact }) {
       className="recenter-btn"
       title="Return to E.NUF"
       style={{
-        position: 'fixed',
+        position: 'absolute',
         top: compact ? 20 : 22,
         left: compact ? 20 : 22,
-        zIndex: compact ? 120 : 90,
+        zIndex: 5,
+        pointerEvents: 'auto',
         background: 'var(--paper)',
         border: '1px solid var(--ink)',
         borderRadius: 999,
@@ -359,6 +362,18 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
   }, [computeCenter]);
 
   const recenter = () => animateTo(computeCenter(), 700);
+
+  // Lock the document while the canvas is mounted: a touch drag can then never
+  // scroll the page, rubber-band, or collapse the mobile URL bar.
+  React.useEffect(() => {
+    const html = document.documentElement;
+    html.classList.add('home-locked');
+    document.body.classList.add('home-locked');
+    return () => {
+      html.classList.remove('home-locked');
+      document.body.classList.remove('home-locked');
+    };
+  }, []);
 
   // Live positions for artworks + extras, plus z-order
   const [items, setItems] = React.useState(() => {
@@ -447,10 +462,10 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
         </div>
       </div>
 
-      </div>
-
-      {/* Hero — fixed overlay, SIBLING of the stage: never inherits the pan */}
-      <div className="home-hero-overlay">
+      {/* Stationary UI layer — inside the stage, SIBLING of .canvas-world, so it
+          is visually part of the canvas but never receives the pan transform. */}
+      <div className="canvas-ui-layer">
+        <ReturnHomeButton onClick={recenter} compact={isMobile} />
         <div className="home-hero">
           <div className="home-hero__main" style={{ transform: `scale(${tweaks?.titleScale ?? 1})` }}>
             <h1 className="title-block__main">E.NUF</h1>
@@ -469,8 +484,7 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
         </div>
       </div>
 
-      {/* Return home button — fixed overlay, outside the world */}
-      <ReturnHomeButton onClick={recenter} compact={isMobile} />
+      </div>
     </div>);
 
 }

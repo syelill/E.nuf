@@ -233,12 +233,34 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* === Home Canvas === */
-.canvas-stage {
+/* While the home canvas is mounted the document itself is locked, so a touch
+   drag can never scroll the page, rubber-band, or collapse the mobile URL bar
+   — that viewport shift was what made the fixed hero appear to move. */
+html.home-locked, body.home-locked {
   position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+/* Absolute (not fixed) inside the locked, viewport-sized .home-page — so the
+   stage cannot be re-anchored by mobile URL-bar/visual-viewport changes, and
+   .canvas-ui-layer's centring box never resizes mid-drag.
+   Do NOT use 100vw/100dvh here: 100vw adds the scrollbar width and 100dvh
+   changes as the URL bar collapses; either shifts the centred hero. */
+.canvas-stage {
+  position: absolute;
   inset: 0;
   overflow: hidden;
   cursor: grab;
+  touch-action: none;
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
+.canvas-item { touch-action: none; }
 .canvas-stage--dragging { cursor: grabbing; }
 
 .canvas-world {
@@ -420,16 +442,31 @@ button { font-family: inherit; cursor: pointer; }
    Lives outside .canvas-world (so panning never moves or scales it) and is
    pointer-events:none apart from its two controls, so the archive wall stays
    draggable straight through it. */
-.home-page { position: relative; width: 100%; max-width: 100%; overflow: hidden; }
-.home-hero-overlay {
-  position: fixed;
+html.home-locked #root { height: 100%; }
+/* Full-viewport container for the archive scene. Fixed here (not on the hero)
+   because #root has no intrinsic height — height:100% would collapse to 0 and
+   take the absolutely-positioned stage with it. Everything INSIDE is absolute. */
+.home-page { position: fixed; inset: 0; width: 100%; max-width: 100%; overflow: hidden; }
+/* Stationary overlay inside .canvas-stage, sibling of the transformed
+   .canvas-world — visually part of the canvas, never panned or scaled. */
+.canvas-world { z-index: 1; }
+.canvas-ui-layer {
+  position: absolute;
   inset: 0;
-  z-index: 80;
-  display: grid;
-  place-items: center;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
   pointer-events: none;
+  transform: none !important;
+  translate: none !important;
+  scale: none !important;
 }
 .home-hero {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%); /* centring only — never pan or zoom */
+  z-index: 2;
   width: min(860px, calc(100vw - 80px));
   display: flex;
   flex-direction: column;
