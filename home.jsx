@@ -464,25 +464,44 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
 
       {/* Stationary UI layer — inside the stage, SIBLING of .canvas-world, so it
           is visually part of the canvas but never receives the pan transform. */}
-      <div className="canvas-ui-layer">
-        <ReturnHomeButton onClick={recenter} compact={isMobile} />
-        <div className="home-hero">
-          <div className="home-hero__main" style={{ transform: `scale(${tweaks?.titleScale ?? 1})` }}>
-            <h1 className="title-block__main">E.NUF</h1>
-            <div className="home-about-group">
-              <ArtistAvatar onClick={onOpenArtist} />
-              <button className="home-about-link" onClick={onOpenArtist} data-no-drag type="button">
-                <MouseClickIcon size={14} />
-                <span className="hand-underline">About me</span>
-              </button>
-            </div>
-          </div>
-          <div className="drag-hint home-hero__instruction">
-            <HandPointerIcon size={28} />
-            <span style={{ margin: 0, padding: 0, lineHeight: 1.45 }}>drag around to explore the archive — pieces are loose, rearrange the wall</span>
+   {typeof document !== "undefined" &&
+  ReactDOM.createPortal(
+    <div className="canvas-ui-layer">
+      <ReturnHomeButton onClick={recenter} compact={isMobile} />
+
+      <div className="home-hero">
+        <div
+          className="home-hero__main"
+          style={{ transform: `scale(${tweaks?.titleScale ?? 1})` }}
+        >
+          <h1 className="title-block__main">E.NUF</h1>
+
+          <div className="home-about-group">
+            <ArtistAvatar onClick={onOpenArtist} />
+
+            <button
+              className="home-about-link"
+              onClick={onOpenArtist}
+              data-no-drag
+              type="button"
+            >
+              <MouseClickIcon size={14} />
+              <span className="hand-underline">About me</span>
+            </button>
           </div>
         </div>
+
+        <div className="drag-hint home-hero__instruction">
+          <HandPointerIcon size={28} />
+
+          <span style={{ margin: 0, padding: 0, lineHeight: 1.45 }}>
+            drag around to explore the archive — pieces are loose, rearrange the wall
+          </span>
+        </div>
       </div>
+    </div>,
+    document.body
+  )}
 
       </div>
     </div>);
