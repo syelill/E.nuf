@@ -240,8 +240,13 @@ const HOME_ANCHOR = { x: 1700, y: 700, w: 620, h: 220 };
 // closer to the anchor (positions only — sizes and rotations untouched) so the
 // archive frames the fixed hero instead of sitting off-screen.
 const MOBILE_SQUEEZE = 0.62;
-// canvas-unit half-extents of the fixed hero's safe zone on phones
+// Desktop keeps the wall tight around the wordmark too — the data was authored
+// at a wider spread than a laptop frame shows, so pieces drifted off-frame.
+const DESKTOP_SQUEEZE = { x: 0.75, y: 0.68 };
+// canvas-unit half-extents of the hero's safe zone. Phones squeeze the wall in,
+// so the zone is tighter; desktop keeps the full 860px composition clear.
 const MOBILE_SAFE = { w: 345, h: 230 };
+const DESKTOP_SAFE = { w: 500, h: 235 };
 function clearHeroZone(it, safe) {
   if (!safe) return it;
   const ax = HOME_ANCHOR.x + HOME_ANCHOR.w / 2;
@@ -257,9 +262,11 @@ function clearHeroZone(it, safe) {
 }
 function squeezeToAnchor(it, k) {
   if (!k || k === 1) return it;
+  const kx = typeof k === 'number' ? k : k.x;
+  const ky = typeof k === 'number' ? k : k.y;
   const ax = HOME_ANCHOR.x + HOME_ANCHOR.w / 2;
   const ay = HOME_ANCHOR.y + HOME_ANCHOR.h / 2;
-  return { ...it, x: Math.round(ax + (it.x - ax) * k), y: Math.round(ay + (it.y - ay) * k) };
+  return { ...it, x: Math.round(ax + (it.x - ax) * kx), y: Math.round(ay + (it.y - ay) * ky) };
 }
 
 // Push a sticky / paper-note item away from the title's center
@@ -369,17 +376,43 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
     const html = document.documentElement;
     html.classList.add('home-locked');
     document.body.classList.add('home-locked');
+    // If the user has pinch-zoomed, panning moves the VISUAL viewport — which
+    // slides any pinned element on screen no matter how it's structured. Re-anchor
+    // the scene container to the visible area so the hero stays put. Offsets only,
+    // no transforms, and never touched at scale 1.
+    const vv = window.visualViewport;
+    const pin = () => {
+      const page = document.querySelector('.home-page');
+      if (!page || !vv) return;
+      if (vv.scale > 1.01) {
+        page.style.left = vv.offsetLeft + 'px';
+        page.style.top = vv.offsetTop + 'px';
+        page.style.width = vv.width + 'px';
+        page.style.height = vv.height + 'px';
+      } else {
+        page.style.left = page.style.top = page.style.width = page.style.height = '';
+      }
+    };
+    pin();
+    if (vv) {
+      vv.addEventListener('resize', pin);
+      vv.addEventListener('scroll', pin);
+    }
     return () => {
       html.classList.remove('home-locked');
       document.body.classList.remove('home-locked');
+      if (vv) {
+        vv.removeEventListener('resize', pin);
+        vv.removeEventListener('scroll', pin);
+      }
     };
   }, []);
 
   // Live positions for artworks + extras, plus z-order
   const [items, setItems] = React.useState(() => {
     const phone = typeof window !== 'undefined' && window.innerWidth < 768;
-    const k = phone ? MOBILE_SQUEEZE : 1;
-    const safe = phone ? MOBILE_SAFE : null;
+    const k = phone ? MOBILE_SQUEEZE : DESKTOP_SQUEEZE;
+    const safe = phone ? MOBILE_SAFE : DESKTOP_SAFE;
     const place = (it) => clearHeroZone(squeezeToAnchor(it, k), safe);
     return [
     ...ARTWORKS.filter((a) => a.x !== undefined).map((a) => place({ ...a, kind: a.type === 'polaroid' ? 'polaroid' : 'frame' })),
@@ -452,6 +485,26 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
           return null;
         })}
 
+        {/* E.NUF composition — pinned to the WALL at HOME_ANCHOR, so it pans and
+            scales with the archive like any other piece. Internal markup unchanged.
+            "Return to E.NUF" re-centres the view on this anchor. */}
+        <div className="home-hero home-hero--on-wall" style={{ left: HOME_ANCHOR.x + HOME_ANCHOR.w / 2, top: HOME_ANCHOR.y + HOME_ANCHOR.h / 2 }}>
+          <div className="home-hero__main" style={{ transform: `scale(${tweaks?.titleScale ?? 1})` }}>
+            <h1 className="title-block__main">E.NUF</h1>
+            <div className="home-about-group">
+              <ArtistAvatar onClick={onOpenArtist} />
+              <button className="home-about-link" onClick={onOpenArtist} data-no-drag type="button">
+                <MouseClickIcon size={14} />
+                <span className="hand-underline">About me</span>
+              </button>
+            </div>
+          </div>
+          <div className="drag-hint home-hero__instruction">
+            <HandPointerIcon size={28} />
+            <span style={{ margin: 0, padding: 0, lineHeight: 1.45 }}>drag around to explore the archive — pieces are loose, rearrange the wall</span>
+          </div>
+        </div>
+
         {/* edge of canvas indicator */}
         <div style={{
           position: 'absolute', left: 200, top: 600, transform: 'rotate(-90deg)',
@@ -462,46 +515,11 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
         </div>
       </div>
 
-      {/* Stationary UI layer — inside the stage, SIBLING of .canvas-world, so it
-          is visually part of the canvas but never receives the pan transform. */}
-   {typeof document !== "undefined" &&
-  ReactDOM.createPortal(
-    <div className="canvas-ui-layer">
-      <ReturnHomeButton onClick={recenter} compact={isMobile} />
-
-      <div className="home-hero">
-        <div
-          className="home-hero__main"
-          style={{ transform: `scale(${tweaks?.titleScale ?? 1})` }}
-        >
-          <h1 className="title-block__main">E.NUF</h1>
-
-          <div className="home-about-group">
-            <ArtistAvatar onClick={onOpenArtist} />
-
-            <button
-              className="home-about-link"
-              onClick={onOpenArtist}
-              data-no-drag
-              type="button"
-            >
-              <MouseClickIcon size={14} />
-              <span className="hand-underline">About me</span>
-            </button>
-          </div>
-        </div>
-
-        <div className="drag-hint home-hero__instruction">
-          <HandPointerIcon size={28} />
-
-          <span style={{ margin: 0, padding: 0, lineHeight: 1.45 }}>
-            drag around to explore the archive — pieces are loose, rearrange the wall
-          </span>
-        </div>
+      {/* Stationary UI layer — holds only the Return control, which must stay
+          reachable no matter how far the wall has been dragged. */}
+      <div className="canvas-ui-layer">
+        <ReturnHomeButton onClick={recenter} compact={isMobile} />
       </div>
-    </div>,
-    document.body
-  )}
 
       </div>
     </div>);
