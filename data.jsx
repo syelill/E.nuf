@@ -67,27 +67,10 @@ const ARTWORKS = [
     x: 1080, y: 100, w: 400, h: 380, rotation: -4
   },
   {
-    id: "national-museum",
-    type: "frame",
-    title: "National Museum",
-    year: "Year to be updated",
-    medium: "Outdoor Mural",
-    location: "Orchard",
-    preview: "Description to be updated.",
-    description: "Description to be updated.",
-    tags: ["Outdoor Mural", "Orchard"],
-    image: "assets/NationalMuseum.JPG",
-    alt: "National Museum artwork",
-    ref: "ARCH-002",
-    category: "Outdoor Murals",
-    palette: 3,
-    x: 1800, y: 80,  w: 340, h: 325, rotation: 3
-  },
-  {
     id: "flash-c",
     type: "polaroid",
     title: "Flash-C",
-    year: "Year to be updated",
+    year: "Jan 2025",
     medium: "Outdoor Mural",
     location: "Orchard",
     preview: "A mural capturing the dynamic energy of Orchard Somerset through water, heritage, self-expression, and local identity.",
@@ -95,7 +78,7 @@ const ARTWORKS = [
     tags: ["Outdoor Mural", "Orchard"],
     image: "assets/FlashC.jpg",
     alt: "Flash-C artwork",
-    ref: "ARCH-003",
+    ref: "ARCH-002",
     category: "Outdoor Murals",
     palette: 4,
     x: 2520, y: 100, w: 320, h: 310, rotation: -2
@@ -112,7 +95,7 @@ const ARTWORKS = [
     tags: ["Outdoor Mural", "Ang Mo Kio"],
     image: "assets/AMK Calm Corner.jpg",
     alt: "Calm Corner mural artwork",
-    ref: "ARCH-004",
+    ref: "ARCH-003",
     category: "Outdoor Murals",
     palette: 3,
     x: 820,  y: 580, w: 280, h: 280, rotation: 4
@@ -120,15 +103,23 @@ const ARTWORKS = [
   {
     id: "scape-sg60-wall",
     type: "polaroid",
-    title: "Title coming soon",
-    year: "Year coming soon",
-    medium: "Medium to be updated",
-    location: "Location coming soon",
-    description: "Details coming soon.",
-    tags: [],
+    title: "SG 60 Tampal/Tampil",
+    year: "Nov 2025",
+    medium: "Project Mural",
+    location: "*SCAPE, Singapore",
+    preview: "Bringing together Singapore's street art community in a massive four storey collaboration at *SCAPE!",
+    description: `Bringing together Singapore's street art community in a massive four storey collaboration at *SCAPE!
+
+For the first time in Singapore, sixty artists, one giant wall, over sixty artworks! 'Tampal' meaning to paste and 'Tampil' meaning to come forth celebrate connection, creativity, and the courage to be seen, a true reflection of our street art spirit.
+
+Part of X *SCAPE and Somerset Graff Jam Vol 3.
+The Montana spray cans for the mural are supported by Krafers Paradise
+Programmer: Zane
+Curator: Zero`,
+    tags: ["Project Mural"],
     image: "assets/SCAPE SG60 Wall.jpg",
     alt: "Archive image — *SCAPE SG60 Wall",
-    ref: "ARCH-005",
+    ref: "ARCH-004",
     category: "Outdoor Murals",
     palette: 5,
     x: 2900, y: 520, w: 240, h: 390, rotation: 3
@@ -136,15 +127,15 @@ const ARTWORKS = [
   {
     id: "scape-10000",
     type: "polaroid",
-    title: "Title coming soon",
-    year: "Year coming soon",
-    medium: "Medium to be updated",
-    location: "Location coming soon",
+    title: "SCAPE 10,000 Aura",
+    year: "2025",
+    medium: "Outdoor Mural",
+    location: "*SCAPE, Singapore",
     description: "Details coming soon.",
-    tags: [],
+    tags: ["Outdoor Mural"],
     image: "assets/SCAPE10000.jpg",
-    alt: "Archive image — *SCAPE 10000",
-    ref: "ARCH-006",
+    alt: "SCAPE 10,000 Aura mural",
+    ref: "ARCH-005",
     category: "Outdoor Murals",
     palette: 7,
     x: 920,  y: 1240, w: 220, h: 347, rotation: 5
@@ -165,7 +156,7 @@ The phrase suggests that such virtue moves Heaven and Earth, drawing the mythica
     tags: ["Outdoor Mural", "Joo Chiat"],
     image: "assets/NECDC 201 Joo Chiat Mural.jpg",
     alt: "Radiance — 201 Joo Chiat Mural",
-    ref: "ARCH-007",
+    ref: "ARCH-006",
     category: "Outdoor Murals",
     palette: 0,
     x: 1620, y: 1240, w: 460, h: 398, rotation: -1
@@ -182,7 +173,7 @@ The phrase suggests that such virtue moves Heaven and Earth, drawing the mythica
     tags: ["Community Engagement", "Singapore Pools", "Singapore"],
     image: "assets/NECDC SGPOOL.jpg",
     alt: "NECDC - Shaping Hearts artwork",
-    ref: "ARCH-008",
+    ref: "ARCH-007",
     category: "Outdoor Murals",
     palette: 3,
     x: 2200, y: 1280, w: 400, h: 375, rotation: 2
@@ -198,7 +189,7 @@ The phrase suggests that such virtue moves Heaven and Earth, drawing the mythica
     tags: [],
     image: "assets/NECDC TAMPINES.jpg",
     alt: "Archive image — NECDC Tampines",
-    ref: "ARCH-009",
+    ref: "ARCH-008",
     category: "Outdoor Murals",
     palette: 2,
     x: 2780, y: 1300, w: 320, h: 283, rotation: -3
@@ -217,10 +208,82 @@ Established in the 1980s as the “City of Books” (书城), the complex was a 
     tags: ["Outdoor Mural", "Bras Basah"],
     image: "assets/genxyz.JPEG",
     alt: "Gen XYZ mural artwork",
-    ref: "ARCH-010",
+    ref: "ARCH-009",
     category: "Outdoor Murals",
     palette: 4,
     x: 1900, y: 1720, w: 340, h: 297, rotation: 4
+  },
+  {
+    id: "aesop-aurner",
+    type: "frame",
+    title: "Aesop Aurner — Magnolia Window Painting",
+    year: "Feb 2025",
+    medium: "Window Painting",
+    location: "Singapore",
+    preview: "For enigmas, alchemists, horticulturists — magnolia motifs hand-painted onto the windows of Aesop Westgate and Aesop Tampines.",
+    description: `For enigmas, alchemists, horticulturists. Aesop launched their new fragrance, Aurner, and I’m grateful to lend a hand to paint Aesop Westgate and Aesop Tampines's windows with motifs of magnolia flower & leaf.`,
+    tags: ["Window Painting", "Brand Collaboration"],
+    image: "assets/Aesop Aurner Westgate.jpg",
+    alt: "Magnolia motifs hand-painted on the windows of Aesop Westgate",
+    ref: "ARCH-010",
+    category: "Paintings & Installations",
+    palette: 6,
+    x: 2660, y: 1780, w: 300, h: 400, rotation: -3
+  },
+  {
+    id: "folding-dreams",
+    type: "frame",
+    title: "Folding Dreams",
+    year: "2021",
+    medium: "Outdoor Mural",
+    location: "Little India, Singapore",
+    preview: "A mural tracing Mustafa Centre's humble beginnings as a textile store, with handkerchiefs folded into massive cranes.",
+    description: `A mural that bring us through the humble beginnings of Mustafa Centre as a textile store in Singapore, depicting a makeshift stall where the handkerchiefs are folded into massive cranes.`,
+    tags: ["Outdoor Mural", "Little India"],
+    image: "assets/Folding Dreams Little India.jpg",
+    alt: "Folding Dreams mural — origami cranes on a wall in Little India",
+    ref: "ARCH-011",
+    category: "Outdoor Murals",
+    palette: 5,
+    x: 1180, y: 1790, w: 320, h: 400, rotation: 3
+  },
+  {
+    id: "atease",
+    type: "frame",
+    title: "Atease",
+    year: "Feb 2025",
+    medium: "Acrylic on canvas, 150cm diameter",
+    location: "Singapore",
+    preview: "A circular snake painting threaded with white ginseng motifs — acrylic on canvas, 150cm diameter.",
+    description: `Acrylic on Canvas, 150cm diameter, snake painting with white ginseng motifs. Read more about it on my blog post "Imprinting Motifs"`,
+    tags: ["Painting", "Paintings & Installations"],
+    image: "assets/Atease 2025.jpg",
+    alt: "Atease — circular acrylic painting of a snake with white ginseng motifs",
+    ref: "ARCH-012",
+    category: "Paintings & Installations",
+    palette: 4,
+    x: 1237, y: 1031, w: 280, h: 280, rotation: -4
+  },
+  {
+    id: "cattleland",
+    type: "frame",
+    title: "Cattleland",
+    year: "2015",
+    medium: "Outdoor Mural",
+    location: "Buffalo Road, Little India, Singapore",
+    preview: "Larger-than-life cattle imprinted with cultural motifs along Buffalo Road, celebrating Little India's trading history.",
+    description: `Cattleland was painted to celebrate the rich history, culture and heritage in Little India. Painted along Buffalo Road, it captures larger than life size, colourful cattles with cultural motifs imprinted on them. The local community shared with the artist that in Singapore's early years where Cattles were traded for economic growth, directly opposite the painted wall used to be a field where cattles were roaming freely. Therefore the artist would like to capture that moment of history in a vibrant and youthful manner for viewers to appreciate.
+
+*Cattleland was present for 1 year (2015 - 2016) before the joint agreement to have it removed for the tenants' business purposes.
+
+Commissioned by Singapore Tourism Board in collaboration with LASALLE College of the Arts`,
+    tags: ["Outdoor Mural", "Little India"],
+    image: "assets/Cattleland 2015.jpg",
+    alt: "Cattleland mural — colourful cattle with cultural motifs on Buffalo Road",
+    ref: "ARCH-013",
+    category: "Outdoor Murals",
+    palette: 0,
+    x: 637, y: 1781, w: 380, h: 260, rotation: 2
   },
 ];
 
@@ -388,6 +451,42 @@ const CV_AWARDS = [
 
 const BLOG_POSTS = [
   {
+    id: "flashc-night-skaters",
+    title: "Flash-C Night Skaters",
+    date: "Jan 17, 2025",
+    category: "Documentation",
+    excerpt: "Night vibes with waves and skaters.",
+    body: "Putting in these documentation for night vibes with waves and skaters.",
+    side: "waves & wheels",
+    tags: ["#streetart", "#skateboard", "#scape"],
+    images: [
+      { src: "assets/Blog Flash-C Night 01.jpg", alt: "Skater mid-trick in front of the Flash-C wave mural at night", caption: "Flash-C · night session" },
+      { src: "assets/Blog Flash-C Night 02.jpg", alt: "Skater airborne over a rail with the Flash-C mural behind", caption: "*SCAPE skate park" }
+    ],
+    pageNumber: "01",
+    palette: 6
+  },
+  {
+    id: "aesop-aurner-magnolia",
+    title: "Aesop Aurner Magnolia Painting",
+    date: "Feb 21, 2025",
+    category: "Collaboration",
+    excerpt: "For enigmas, alchemists, horticulturists.",
+    body: [
+      "Aesop launched their new fragrance, Aurner, and I’m grateful to lend a hand to paint Aesop Westgate and Aesop Tampines's windows with motifs of magnolia flower & leaf. Shoutout to Yasue for the lovely collaboration and Foo Hui Wen assisting me in this.",
+      "Rolling this out at Aesop hits home differently. I will always miss the friendships forged and overthinking product placements.",
+      "Aurner Eau de Parfum — A defiant floral fragrance with unexpected contrasts: rousing green spice converges with herbaceous depths, while resonant Magnolia Leaf finds roots in sumptuous woody notes.",
+      "Tell me if you like the fragrance! Walk into any Aesop store and experience it personally."
+    ],
+    side: "a defiant bloom",
+    tags: ["#aesop", "#collaboration", "#painting"],
+    images: [
+      { src: "assets/Aesop Aurner Tampines.jpg", alt: "Magnolia motifs painted on the window of Aesop Tampines", caption: "Aesop Tampines · window" }
+    ],
+    pageNumber: "02",
+    palette: 5
+  },
+  {
     id: "texture-of-place",
     title: "The Texture of a Place",
     date: "March 2024",
@@ -396,7 +495,7 @@ const BLOG_POSTS = [
     body: "Every city I work in leaves a residue on the work — sometimes literally. Lisbon arrived as a pale ochre that I keep mixing back into other paintings. Accra gave me a particular red I could only find by grinding the soil itself. I've started thinking of palette less as a set of choices and more as a memory of where I've been.",
     side: "salt-bleached / sun-warmed / soft",
     tags: ["Journal", "Place", "Research"],
-    pageNumber: "01",
+    pageNumber: "03",
     palette: 5
   },
   {
@@ -408,7 +507,7 @@ const BLOG_POSTS = [
     body: "Most of what is in the diary is bad. Most of what is in the diary will never become anything. But once a week, something small — a margin sketch, an overheard line — becomes the seed of an actual piece. The bad pages are not waste. They are compost.",
     side: "compost, not waste",
     tags: ["Journal", "Practice"],
-    pageNumber: "02",
+    pageNumber: "04",
     palette: 4
   },
   {
@@ -420,7 +519,7 @@ const BLOG_POSTS = [
     body: "I'll spend whole mornings on one corner with a small set of pencils — twelve colours, no more — trying to match exactly the pink of a peeling shopfront. It is a stupid, slow exercise. It is also the most useful thing I do.",
     side: "twelve pencils,\nno more",
     tags: ["Colour", "Cities", "Research"],
-    pageNumber: "03",
+    pageNumber: "05",
     palette: 0
   },
   {
@@ -432,7 +531,7 @@ const BLOG_POSTS = [
     body: "I distrust paintings that look brand new. Not because newness is bad, but because nothing in life arrives that way. I am trying to make work that already has a memory inside it — small wear, small smudge, the feeling of a thing that has been carried.",
     side: "small wear,\nsmall smudge",
     tags: ["Process", "Reflection"],
-    pageNumber: "04",
+    pageNumber: "06",
     palette: 2
   },
 ];

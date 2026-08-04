@@ -346,7 +346,10 @@ function HomeCanvas({ onOpenArtwork, onOpenArtist, tweaks }) {
   const computeCenter = React.useCallback(() => {
     const w = typeof window !== 'undefined' ? window.innerWidth : 1280;
     const h = typeof window !== 'undefined' ? window.innerHeight : 800;
-    const scale = w < 480 ? 0.62 : w < 768 ? 0.78 : w < 1024 ? 0.9 : 1;
+    // Desktop scale tracks the frame so the SAME slice of wall always fits:
+    // the squeeze was fitted to a 1580px-wide frame, so a fixed scale of 1 made
+    // the visible wall shrink with the window and the page read as empty beige.
+    const scale = w < 480 ? 0.62 : w < 768 ? 0.78 : Math.min(1, Math.max(0.62, w / 1580));
     const cx = HOME_ANCHOR.x + HOME_ANCHOR.w / 2;
     const cy = HOME_ANCHOR.y + HOME_ANCHOR.h / 2;
     return { x: w / 2 - cx * scale, y: h / 2 - cy * scale, scale };
