@@ -271,12 +271,13 @@ function FeatureRow({ work, number, reversed, onClick }) {
         <div>
           <div style={{
             display: 'flex', alignItems: 'center', gap: 14, marginBottom: 22,
+            paddingRight: 52,
             fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.25em',
             textTransform: 'uppercase', color: 'var(--pencil)'
           }}>
-            <span>No. {String(number).padStart(2, '0')}</span>
-            <span style={{ flex: 1, height: 1, background: 'rgba(31,27,21,0.25)' }} />
-            <span style={{ color: accent, fontWeight: 600 }}>{work.year} · {work.location}</span>
+            <span style={{ flexShrink: 0 }}>No. {String(number).padStart(2, '0')}</span>
+            <span style={{ flex: '1 1 12px', minWidth: 12, height: 1, background: 'rgba(31,27,21,0.25)' }} />
+            <span style={{ color: accent, fontWeight: 600, minWidth: 0, textAlign: 'right', textWrap: 'pretty' }}>{work.year} · {work.location}</span>
           </div>
 
           <h2 style={{
@@ -314,16 +315,16 @@ function FeatureRow({ work, number, reversed, onClick }) {
         {/* Bottom: tags + view link */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          gap: 14, flexWrap: 'wrap',
+          columnGap: 14, rowGap: 12, flexWrap: 'wrap',
           paddingTop: 22, borderTop: '1px dashed rgba(31,27,21,0.25)'
         }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center', flex: '1 1 220px', minWidth: 0 }}>
             <span style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--pencil)', marginRight: 4 }}>Tags</span>
             {work.tags.map(t => <span key={t} className="tag-pill">{t}</span>)}
           </div>
           <span style={{
             fontFamily: 'var(--hand)', fontSize: 22, color: accent,
-            display: 'inline-flex', alignItems: 'center', gap: 6,
+            display: 'inline-flex', alignItems: 'center', gap: 6, flexShrink: 0,
             transform: hover ? 'translateX(4px)' : 'translateX(0)',
             transition: 'transform .25s ease'
           }}>

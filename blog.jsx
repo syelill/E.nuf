@@ -8,11 +8,26 @@ function JournalSketch({ palette, seed, label }) {
   );
 }
 
+function JournalPhotos({ images, stacked }) {
+  return (
+    <div className={"journal-photos" + (stacked ? " journal-photos--stack" : "")} style={stacked ? undefined : { gridTemplateColumns: images.length === 1 ? '1fr' : '1fr 1fr' }}>
+      {images.map((im, i) => (
+        <figure className="journal-photo" key={im.src}>
+          <img src={im.src} alt={im.alt || ''} draggable={false} loading="lazy" />
+          {im.caption ? <figcaption className="journal-photo__cap">{im.caption}</figcaption> : null}
+        </figure>
+      ))}
+    </div>
+  );
+}
+
 function BlogPage({ tweaks }) {
   const [idx, setIdx] = React.useState(0);
   const [flipping, setFlipping] = React.useState(false);
   const [paused, setPaused] = React.useState(false);
   const post = BLOG_POSTS[idx];
+  // 2+ photos: stack them above/below and let them fill the left page.
+  const stacked = !!(post.images && post.images.length > 1);
 
   const autoplay = tweaks?.blogAutoplay !== false;
   const intervalMs = (tweaks?.blogIntervalSec ?? 5) * 1000;
@@ -69,21 +84,27 @@ function BlogPage({ tweaks }) {
       {/* Spread */}
       <div className={"journal-spread" + (flipping ? " journal-spread--flipping" : "")} key={post.id}>
         {/* LEFT page — sketch + meta */}
-        <div className="journal-page journal-page--left">
+        <div className={"journal-page journal-page--left" + (stacked ? " journal-page--left-fill" : "")}>
           <div className="journal-meta">
             <span>{post.date}</span>
             <span>Entry · {post.pageNumber}</span>
           </div>
           <span className="journal-cat">{post.category}</span>
 
-          <div style={{ marginTop: 28, marginBottom: 18 }}>
-            <JournalSketch palette={post.palette} seed={idx} label={`STUDY · ${post.pageNumber}`} />
+          {stacked ? <div className="journal-side journal-side--inline">"{post.side}"</div> : null}
+
+          <div className={"journal-photoslot" + (stacked ? " journal-photoslot--fill" : "")}>
+            {post.images && post.images.length
+              ? <JournalPhotos images={post.images} stacked={stacked} />
+              : <JournalSketch palette={post.palette} seed={idx} label={`STUDY · ${post.pageNumber}`} />}
           </div>
 
-          {/* side note */}
-          <div className="journal-side" style={{ left: 80, top: 'auto', bottom: 90 }}>
-            "{post.side}"
-          </div>
+          {/* side note — inline above the photos when they fill the page */}
+          {stacked ? null : (
+            <div className="journal-side" style={{ left: 80, top: 'auto', bottom: 90 }}>
+              "{post.side}"
+            </div>
+          )}
 
           {/* doodle */}
           <svg style={{ position: 'absolute', right: 40, top: 40, opacity: .5 }} width="70" height="70" viewBox="0 0 70 70">
@@ -102,12 +123,18 @@ function BlogPage({ tweaks }) {
           </div>
           <h2 className="journal-title">{post.title}</h2>
           <p className="journal-excerpt">{post.excerpt}</p>
-          <p className="journal-body">{post.body}</p>
+          {Array.isArray(post.body)
+            ? post.body.map((para, i) => (
+                <p key={i} className={"journal-body" + (post.body.length > 2 ? " journal-body--compact" : "")}>{para}</p>
+              ))
+            : <p className="journal-body">{post.body}</p>}
 
-          {/* margin note */}
-          <div className="journal-side" style={{ right: 30, top: 240, transform: 'rotate(4deg)', fontSize: 18 }}>
-            ※ keep going
-          </div>
+          {/* margin note — only on shorter entries, so it never sits over the text */}
+          {Array.isArray(post.body) && post.body.length > 2 ? null : (
+            <div className="journal-side" style={{ right: 30, top: 240, transform: 'rotate(4deg)', fontSize: 18 }}>
+              ※ keep going
+            </div>
+          )}
 
           <div className="journal-tags">
             {post.tags.map(t => <span key={t} className="tag-pill">{t}</span>)}
