@@ -2703,9 +2703,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
    change here. The wall stays draggable behind the fixed overlay. */
 @media (max-width: 767px) {
   .home-hero { width: calc(100vw - 32px); max-width: 430px; margin: 0 auto; }
-  .home-hero__main { width: 100%; gap: clamp(10px, 3vw, 18px); }
-  .title-block__main { font-size: clamp(58px, 19vw, 88px); line-height: 0.88; white-space: nowrap; margin: 0; flex-shrink: 1; }
-  .home-about-group { flex-shrink: 0; gap: 0; }
+  /* Stacked order: About me + icon, then E.NUF, then the drag hint */
+  .home-hero__main { width: 100%; flex-direction: column-reverse; align-items: center; gap: clamp(8px, 2.5vw, 14px); }
+  .title-block__main { font-size: clamp(64px, 21vw, 104px); line-height: 0.88; white-space: nowrap; margin: 0; flex-shrink: 0; }
+  .home-about-group { flex-direction: row-reverse; align-items: center; flex-shrink: 0; gap: 10px; }
   .home-about-group .avatar {
     width: clamp(52px, 15vw, 72px) !important;
     height: clamp(52px, 15vw, 72px) !important;
@@ -2713,7 +2714,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     border-radius: 50%;
   }
   .home-about-group .avatar img { width: 100%; height: 100%; object-fit: contain; }
-  .home-about-link { margin-top: 6px; font-size: clamp(14px, 4vw, 17px); white-space: nowrap; text-align: center; }
+  .home-about-link { margin-top: 0; font-size: clamp(15px, 4.4vw, 19px); white-space: nowrap; text-align: center; }
   .home-hero__instruction {
     width: min(310px, calc(100vw - 48px));
     max-width: none;
